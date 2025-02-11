@@ -20,8 +20,19 @@ function App() {
 
   useEffect(() => {
     fetch('http://localhost:4000/produtos')
-      .then((res) => res.json())
-      .then((res) => setGames(res))
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erro na API: ${res.status} ${res.statusText}`)
+        }
+        return res.json()
+      })
+      .then((data) => {
+        console.log('Produtos carregados:', data)
+        setGames(data)
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar produtos:', error)
+      })
   }, [])
 
   function adicionarAoCarrinho(jogo: Game) {
