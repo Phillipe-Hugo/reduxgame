@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Produtos from './containers/Produtos'
-
 import { GlobalStyle } from './styles'
+import { Provider } from 'react-redux'
+import { store } from './store'
 
 export type Game = {
   id: number
@@ -15,42 +16,34 @@ export type Game = {
 }
 
 function App() {
+  /* Não vou remover, pois é um exemplo de fetch sem Redux
   const [games, setGames] = useState<Game[]>([])
-  const [carrinho, setCarrinho] = useState<Game[]>([])
-
-  useEffect(() => {
-    fetch('http://localhost:4000/produtos')
+    useEffect(() => {
+    fetch('/produtos')
       .then((res) => {
         if (!res.ok) {
-          throw new Error(`Erro na API: ${res.status} ${res.statusText}`)
+          throw new Error('Servidor não respondeu com sucesso')
         }
         return res.json()
       })
       .then((data) => {
-        console.log('Produtos carregados:', data)
+        console.log('Dados recebidos:', data)
         setGames(data)
       })
       .catch((error) => {
-        console.error('Erro ao buscar produtos:', error)
+        console.error('Captura de erro:', error)
       })
   }, [])
-
-  function adicionarAoCarrinho(jogo: Game) {
-    if (carrinho.find((game) => game.id === jogo.id)) {
-      alert('Item já adicionado')
-    } else {
-      setCarrinho([...carrinho, jogo])
-    }
-  }
+  */
 
   return (
-    <>
+    <Provider store={store}>
       <GlobalStyle />
       <div className="container">
-        <Header itensNoCarrinho={carrinho} />
-        <Produtos jogos={games} adicionarAoCarrinho={adicionarAoCarrinho} />
+        <Header />
+        <Produtos />
       </div>
-    </>
+    </Provider>
   )
 }
 
